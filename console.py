@@ -165,15 +165,24 @@ class HBNBCommand(cmd.Cmd):
                     para = class_name + " " + my_id
                     self.do_destroy(para)
                 elif "update" in command :
-                    my_id_splited = command.split("(")[1].strip(")")
-                    my_id_splited2 = my_id_splited.replace('"', '').replace(',', '')
-                    my_id_splited3 = my_id_splited2.split(" ")[0]
-                    my_id = class_name + " " + my_id_splited3
-                    my_att = my_id_splited2.split(" ")[1]
-                    my_val = my_id_splited2.split(" ")[2]
-                    arg = my_id + " " + my_att + " " + my_val
-                    self.do_update(arg)
-            
+                    cn = class_name
+                    if "{" not in command.split("(")[1]:
+                        my_id_splited = command.split("(")[1].strip(")")
+                        my_id_splited2 = my_id_splited.replace('"', '').replace(',', '')
+                        my_id_splited3 = my_id_splited2.split(" ")[0]
+                        my_id = cn + " " + my_id_splited3
+                        my_att = my_id_splited2.split(" ")[1]
+                        my_val = my_id_splited2.split(" ")[2]
+                        arg = my_id + " " + my_att + " " + my_val
+                        self.do_update(arg)
+                    elif len(command.split("(")[1].split(", {")) == 2:
+                        my_id = command.split("(")[1].split(", {")[0].strip(')"')
+                        my_dict = command.split("(")[1].split(", {")[1].strip(')')
+                        dic = eval("{" + my_dict)
+                        for att, val in dic.items():
+                            arg = cn + " " + my_id + " " + att + " " + str(val)
+                            self.do_update(arg)
+
     def count(self, class_name):
         objects = models.storage.all()
         num_objs = 0
