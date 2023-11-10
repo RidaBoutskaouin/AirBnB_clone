@@ -103,8 +103,7 @@ class HBNBCommand(cmd.Cmd):
                 string = str(objects[key])
                 list_p.append(string)
             print(list_p)
-        elif args[0] in list_classes:
-            """ to revieeewwwwweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee """          
+        elif args[0] in list_classes:          
             list_p = []
             for key in objects.keys():
                 string = str(objects[key])
@@ -143,7 +142,6 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
         else:
             print("** class doesn't exist **")
-	
 
     def default(self, args):
         words = args.split(".")
