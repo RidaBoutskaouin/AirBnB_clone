@@ -143,7 +143,44 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
         else:
             print("** class doesn't exist **")
+	
 
+    def default(self, args):
+        words = args.split(".")
+        class_name = words[0]
+        if class_name in list_classes:
+            command = words[1]
+            if command in ['all()', 'count()']:
+                if command == "all()":
+                    self.do_all(class_name)
+                elif command == "count()":
+                    self.count(class_name)
+            else:
+                if "show" in command :
+                    my_id = command.split("(")[1].strip(")")
+                    para = class_name + " " + my_id
+                    self.do_show(para)
+                elif "destroy" in command :
+                    my_id = command.split("(")[1].strip(")")
+                    para = class_name + " " + my_id
+                    self.do_destroy(para)
+                elif "update" in command :
+                    my_id_splited = command.split("(")[1].strip(")")
+                    my_id_splited2 = my_id_splited.replace('"', '').replace(',', '')
+                    my_id_splited3 = my_id_splited2.split(" ")[0]
+                    my_id = class_name + " " + my_id_splited3
+                    my_att = my_id_splited2.split(" ")[1]
+                    my_val = my_id_splited2.split(" ")[2]
+                    arg = my_id + " " + my_att + " " + my_val
+                    self.do_update(arg)
+            
+    def count(self, class_name):
+        objects = models.storage.all()
+        num_objs = 0
+        for name_id in objects.keys():
+            if name_id.split(".")[0] == class_name:
+                num_objs += 1
+        print(num_objs)
 
 
 if __name__ == '__main__':
