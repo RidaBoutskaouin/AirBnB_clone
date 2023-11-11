@@ -3,8 +3,9 @@
 
 from models.base_model import BaseModel
 
+
 class State(BaseModel):
     """Represent a State.
-        Attributes: name (str): name Of the state.      
+        Attributes: name (str): name Of the state.
     """
     name = ""
