@@ -145,6 +145,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def default(self, args):
+        """default method"""
         words = args.split(".")
         class_name = words[0]
         if class_name in list_classes:
@@ -187,6 +188,7 @@ class HBNBCommand(cmd.Cmd):
                             self.do_update(arg)
 
     def count(self, class_name):
+        """count method"""
         objects = models.storage.all()
         num_objs = 0
         for name_id in objects.keys():
