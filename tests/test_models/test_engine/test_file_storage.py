@@ -12,6 +12,11 @@ class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """Set up test environment"""
         self.storage = FileStorage()
+        self.storage._FileStorage__objects = {}
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
 
     def tearDown(self):
         """Tear down test environment"""
@@ -19,6 +24,7 @@ class TestFileStorage(unittest.TestCase):
             os.remove("file.json")
         except FileNotFoundError:
             pass
+        self.storage._FileStorage__objects = {}
 
     def test_all(self):
         """Test the all method"""
@@ -53,10 +59,10 @@ class TestFileStorage(unittest.TestCase):
 
     def test_reload(self):
         """Test the reload method"""
-        # Ensure reload loads objects from file.json
-        obj = BaseModel()
-        self.storage.new(obj)
+        self.storage.new(BaseModel())
         self.storage.save()
+        self.storage._FileStorage__objects = {}
         self.storage.reload()
-        self.assertEqual(self.storage.all(),
-                         {"BaseModel.{}".format(obj.id): obj})
+        for obj in self.storage.all().values():
+            self.assertIsInstance(obj, BaseModel)
+        self.assertEqual(len(self.storage.all()), 1)
