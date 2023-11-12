@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" import modules for set id and datetime """
+""" Base Model Module """
 
 import uuid
 from datetime import datetime
