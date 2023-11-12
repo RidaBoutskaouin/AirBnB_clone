@@ -1,67 +1,100 @@
 #!/usr/bin/python3
-"""Unittest for BaseModel class"""
-import unittest
+"""Unittest for the BaseModel Class """
+import datetime
 from models.base_model import BaseModel
-from datetime import datetime
-import uuid
-import json
 import os
+import json
+import unittest
 
 
 class TestBaseModel(unittest.TestCase):
-    """Test cases for BaseModel class"""
-
+    """
+    This class contains unittests for the BaseModel class.
+    """
     def setUp(self):
-        """Set up test methods"""
-        self.base = BaseModel()
+        """Method that the setUp the cases to test"""
+        self.my_model = BaseModel()
+        self.my_model.name = "My_First_Model"
+        self.my_model.my_number = 89
+        self.id = self.my_model.id
+        self.type_1 = datetime.datetime
+        self.my_model_json = self.my_model.to_dict()
 
     def tearDown(self):
-        """Tear down test methods"""
-        pass
+        """Method to clean the tests"""
+        del self.my_model
 
-    def test_instance(self):
-        """Test for correct instancing of BaseModel object"""
-        self.assertIsInstance(self.base, BaseModel)
+    def test_init_(self):
+        """Test for The __init__ method in the BaseModel"""
+        self.assertIsInstance(self.my_model, BaseModel)
 
-    def test_inheritance(self):
-        """Test for correct inheritance of BaseModel object"""
-        self.assertTrue(issubclass(self.base.__class__, BaseModel), True)
+    def test_new_attribue(self):
+        """Test for the saving attributes"""
+        self.assertEqual(self.my_model.name, "My_First_Model")
+        self.assertEqual(self.my_model.my_number, 89)
 
-    def test_attributes(self):
-        """Test for correct attributes"""
-        self.assertTrue("id" in self.base.__dict__)
-        self.assertTrue("created_at" in self.base.__dict__)
-        self.assertTrue("updated_at" in self.base.__dict__)
+    def test_id(self):
+        """Test for the id generating"""
+        self.assertEqual(self.id, self.my_model.id)
 
-    def test_save(self):
-        """Test for correct save functionality"""
-        self.base.save()
-        self.assertNotEqual(self.base.created_at, self.base.updated_at)
+    def test_id_unique(self):
+        """
+        Test if each instance of BaseModel has a unique id.
+        """
+        base_model1 = BaseModel()
+        base_model2 = BaseModel()
+        self.assertNotEqual(base_model1.id, base_model2.id)
 
-    def test_str(self):
-        """Test for correct str output"""
-        self.assertEqual(
-            str(self.base),
-            "[BaseModel] ({}) {}".format(self.base.id, self.base.__dict__),
-        )
+    def test_str_representation(self):
+        """
+        Test the __str__ method of BaseModel.
+        """
+        base_model = BaseModel()
+        str_repr = str(base_model)
+        self.assertIn("[BaseModel]", str_repr)
+        self.assertIn(base_model.id, str_repr)
+        self.assertIn(str(base_model.__dict__), str_repr)
+
+    def test_created_at(self):
+        """Test for the type of created_at"""
+        self.assertEqual(self.type_1, type(self.my_model.created_at))
+
+    def test_to_dict_created_at_isoformat(self):
+        self.assertEqual(self.my_model_json['created_at'],
+                         self.my_model.created_at.isoformat())
+
+    def test_to_dict_updated_at_isoformat(self):
+        self.assertEqual(self.my_model_json['updated_at'],
+                         self.my_model.updated_at.isoformat())
+
+    def test_save_updates_updated_at(self):
+        prev_updated_at = self.my_model.updated_at
+        self.my_model.save()
+        self.assertNotEqual(prev_updated_at, self.my_model.updated_at)
 
     def test_to_dict(self):
-        """Test for correct dictionary output"""
-        self.assertEqual("to_dict" in dir(self.base), True)
+        """Test for to_dic method"""
+        self.assertEqual(self.my_model_json, self.my_model.to_dict())
 
-    def test_kwargs(self):
-        """Test for correct instantiation from kwargs"""
-        self.base.name = "Holberton"
-        self.base.my_number = 89
-        self.base.save()
-        self.base_json = self.base.to_dict()
-        self.base_new = BaseModel(**self.base_json)
-        self.assertEqual(self.base_new.id, self.base.id)
-        self.assertEqual(self.base_new.created_at, self.base.created_at)
-        self.assertEqual(self.base_new.updated_at, self.base.updated_at)
-        self.assertEqual(self.base_new.name, self.base.name)
-        self.assertEqual(self.base_new.my_number, self.base.my_number)
+    def test_to_dict_contains_correct_keys(self):
+        keys = ['id', 'created_at', 'updated_at', '__class__']
+        for key in keys:
+            self.assertIn(key, self.my_model_json)
+
+    def test_to_dict_returns(self):
+        """
+        Test if to_dict method returns a
+        dictionary with the correct attributes.
+        """
+        base_model = BaseModel()
+        base_model_dict = base_model.to_dict()
+        self.assertIsInstance(base_model_dict, dict)
+        self.assertIn("__class__", base_model_dict)
+        self.assertEqual(base_model_dict["__class__"], "BaseModel")
+        self.assertIn("id", base_model_dict)
+        self.assertIn("created_at", base_model_dict)
+        self.assertIn("updated_at", base_model_dict)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
