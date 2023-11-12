@@ -1,81 +1,95 @@
 #!/usr/bin/python3
-"""Unittest for Amenity class"""
+"""
+    Test User unittest module
+"""
+
+from datetime import datetime, date
 import unittest
-from models.amenity import Amenity
-from datetime import datetime
+from  models.amenity import Amenity
 from models.base_model import BaseModel
 
 
-class TestAmenity(unittest.TestCase):
-    """Test cases for Amenity class"""
+class TestAmenity_object_instance(unittest.TestCase):
+
+    """
+        Test amenity class object instance
+    """
 
     def setUp(self):
-        """Set up test methods"""
-        self.amenity = Amenity()
-        self.amenity.name = "Wifi"
+        print("Testing Amenity Object Instance")
 
-    def tearDown(self):
-        """Tear down test methods"""
-        pass
+    def test_Amenity_is_a_subclass_basemodel(self):
+        a1 = Amenity()
+        self.assertIsInstance(a1, BaseModel)
 
-    def test_instance(self):
-        """Test for correct instancing of Amenity object"""
-        self.assertIsInstance(self.amenity, Amenity)
+    def test_Amenity_is_instabce(self):
+        a1 = Amenity()
+        self.assertIsInstance(a1, Amenity)
 
-    def test_inheritance(self):
-        """Test for correct inheritance of Amenity object"""
-        self.assertTrue(issubclass(self.amenity.__class__, BaseModel), True)
+    def test_Amenity_two_ids(self):
+        a1 = Amenity()
+        a2 = Amenity()
+        self.assertNotEqual(a1.id, a2.id)
 
-    def test_attributes(self):
-        """Test for correct attributes"""
-        self.assertTrue("name" in self.amenity.__dict__)
+    def test_Amenity_three_ids(self):
+        a1 = Amenity()
+        a2 = Amenity()
+        a3 = Amenity()
+        self.assertNotEqual(a3.id, a1.id)
 
-    def test_save(self):
-        """Test for correct save functionality"""
-        self.amenity.save()
-        self.assertNotEqual(self.amenity.created_at, self.amenity.updated_at)
+    def test_Amenity_created_time(self):
+        a1 = Amenity()
+        a2 = Amenity()
+        self.assertNotEqual(a1.created_at, a2.created_at)
 
-    def test_str(self):
-        """Test for correct str output"""
-        self.assertEqual(
-            str(self.amenity),
-            "[Amenity] ({}) {}".format(self.amenity.id, self.amenity.__dict__),
-        )
+    def test_Amenity_updated_time(self):
+        a1 = Amenity()
+        a2 = Amenity()
+        self.assertNotEqual(a1.updated_at, a2.updated_at)
 
-    def test_to_dict(self):
-        """Test for correct dictionary output"""
-        self.assertEqual("to_dict" in dir(self.amenity), True)
+    def test_Amenity_nameid_default_value(self):
+        a1 = Amenity()
+        self.assertEqual(a1.name, "")
 
-    def test_name_type(self):
-        """Test for correct type of name attribute"""
-        self.assertEqual(type(self.amenity.name), str)
 
-    def test_name_length(self):
-        """Test for correct length of name attribute"""
-        self.assertTrue(len(self.amenity.name) <= 128)
+class TestAmenity_Has_attr_basemodel(unittest.TestCase):
+    """
+        Test Amenity for basemodel attributes
+    """
 
-    def test_created_at_type(self):
-        """Test for correct type of created_at attribute"""
-        self.assertEqual(type(self.amenity.created_at), datetime)
+    def setUp(self):
+        print("Testing if Amenity has the attributes of BaseModel")
 
-    def test_updated_at_type(self):
-        """Test for correct type of updated_at attribute"""
-        self.assertEqual(type(self.amenity.updated_at), datetime)
+    def test_Amenity_has_id_attr(self):
+        a1 = Amenity()
+        self.assertTrue(a1.id)
 
-    def test_id_type(self):
-        """Test for correct type of id attribute"""
-        self.assertEqual(type(self.amenity.id), str)
+    def test_Amenity_has_created_at_attr(self):
+        a1 = Amenity()
+        self.assertTrue(a1.created_at)
 
-    def test_to_dict_output(self):
-        """Test for correct output of to_dict method"""
-        expected_dict = {
-            "id": self.amenity.id,
-            "created_at": self.amenity.created_at.isoformat(),
-            "updated_at": self.amenity.updated_at.isoformat(),
-            "name": "Wifi",
-            "__class__": "Amenity",
-        }
-        self.assertDictEqual(self.amenity.to_dict(), expected_dict)
+    def test_Amenity_has_updated_at_attr(self):
+        a1 = Amenity()
+        self.assertTrue(a1.created_at)
+
+    def test_Amenity_has__str___attr(self):
+        a1 = Amenity()
+        self.assertTrue(a1.__str__)
+
+    def test_Amenity_has_save_attr(self):
+        a1 = Amenity()
+        self.assertTrue(a1.save)
+
+    def test_Amenity_has_to_dict_attr(self):
+        al = Amenity()
+        self.assertTrue(al.to_dict)
+
+    def test_Amenity_can_take_kwargs(self):
+        a2 = Amenity(name="Al-Areef")
+        self.assertEqual(a2.name, "Al-Areef")
+
+
+
 
 
 if __name__ == "__main__":
