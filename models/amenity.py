@@ -1,20 +1,12 @@
 #!/usr/bin/python3
-"""
-This module defines the Amenity class, which inherits from BaseModel.
-
-Amenity class represents an amenity that can be
-associated with a place in the AirBnB clone project.
-"""
+"""Defines the Amenity class inheriting from BaseModel Classe"""
 
 from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """
-    Amenity class for representing amenities in the AirBnB clone project.
-
-    Attributes:
-        name (str): Name of the amenity.
+    """Represent a Amenity.
+    Attributes: name (str): The name of the Amenity.
     """
 
     name = ""
