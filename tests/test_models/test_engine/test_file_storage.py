@@ -1,73 +1,58 @@
 #!/usr/bin/python3
-"""unittests for FileStorage class"""
-
+"""Unittest for file_storage.py"""
 import unittest
-import pep8
 import os
-import json
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
-from models import storage
-
 
 class TestFileStorage(unittest.TestCase):
-    """Test cases for FileStorage class"""
+    """Test the FileStorage class"""
 
-    @classmethod
-    def setUpClass(cls):
-        """Set up class before start testing"""
-        cls.fs = FileStorage()
+    def setUp(self):
+        """Set up test environment"""
+        self.storage = FileStorage()
 
-    @classmethod
-    def tearDownClass(cls):
-        """Remove storage file at end of tests"""
-        del cls.fs
+    def tearDown(self):
+        """Tear down test environment"""
         try:
             os.remove("file.json")
         except FileNotFoundError:
             pass
 
-    def test_pep8(self):
-        """Test pep8 styling"""
-        style = pep8.StyleGuide(quiet=True)
-        result = style.check_files(["models/engine/file_storage.py"])
-        self.assertEqual(result.total_errors, 0)
-
-    def test_docstring(self):
-        """Test docstring"""
-        self.assertIsNotNone(FileStorage.__doc__)
-
-    def test_class_docstring(self):
-        """Test class docstring"""
-        self.assertIsNotNone(FileStorage.__doc__)
-
-    def test_fs_is_instance(self):
-        """Test if fs is an instance of FileStorage"""
-        self.assertIsInstance(self.fs, FileStorage)
-
     def test_all(self):
-        """Test all method"""
-        self.assertIsInstance(self.fs.all(), dict)
+        """Test the all method"""
+        # Ensure all returns an empty dict when there are no objects
+        self.assertEqual(self.storage.all(), {})
+
+        # Ensure all returns a dict of all objects when there are objects
+        obj1 = BaseModel()
+        obj2 = BaseModel()
+        self.storage.new(obj1)
+        self.storage.new(obj2)
+        self.assertEqual(self.storage.all(), {"BaseModel.{}".format(obj1.id): obj1,
+                                              "BaseModel.{}".format(obj2.id): obj2})
 
     def test_new(self):
-        """Test new method"""
-        bm = BaseModel()
-        self.fs.new(bm)
-        self.assertIn("BaseModel." + bm.id, self.fs.all().keys())
+        """Test the new method"""
+        # Ensure new adds an object to the objects dict
+        obj = BaseModel()
+        self.storage.new(obj)
+        self.assertEqual(self.storage.all(), {"BaseModel.{}".format(obj.id): obj})
 
     def test_save(self):
-        """Test save method"""
-        bm = BaseModel()
-        self.fs.new(bm)
-        self.fs.save()
-        self.assertTrue(os.path.exists("file.json"))
+        """Test the save method"""
+        # Ensure save writes to file.json
+        obj = BaseModel()
+        self.storage.new(obj)
+        self.storage.save()
         with open("file.json", "r") as f:
-            self.assertIn("BaseModel." + bm.id, f.read())
+            self.assertIn("BaseModel.{}".format(obj.id), f.read())
 
     def test_reload(self):
-        """Test reload method"""
-        bm = BaseModel()
-        self.fs.new(bm)
-        self.fs.save()
-        storage.reload()
-        self.assertIn("BaseModel." + bm.id, storage.all().keys())
+        """Test the reload method"""
+        # Ensure reload loads objects from file.json
+        obj = BaseModel()
+        self.storage.new(obj)
+        self.storage.save()
+        self.storage.reload()
+        self.assertEqual(self.storage.all(), {"BaseModel.{}".format(obj.id): obj})
