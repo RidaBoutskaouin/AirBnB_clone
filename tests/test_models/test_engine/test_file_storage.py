@@ -5,6 +5,7 @@ import os
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 
+
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
 
@@ -29,15 +30,17 @@ class TestFileStorage(unittest.TestCase):
         obj2 = BaseModel()
         self.storage.new(obj1)
         self.storage.new(obj2)
-        self.assertEqual(self.storage.all(), {"BaseModel.{}".format(obj1.id): obj1,
-                                              "BaseModel.{}".format(obj2.id): obj2})
+        self.assertEqual(self.storage.all(),
+                         {"BaseModel.{}".format(obj1.id): obj1,
+                         "BaseModel.{}".format(obj2.id): obj2})
 
     def test_new(self):
         """Test the new method"""
         # Ensure new adds an object to the objects dict
         obj = BaseModel()
         self.storage.new(obj)
-        self.assertEqual(self.storage.all(), {"BaseModel.{}".format(obj.id): obj})
+        self.assertEqual(self.storage.all(),
+                         {"BaseModel.{}".format(obj.id): obj})
 
     def test_save(self):
         """Test the save method"""
@@ -55,4 +58,5 @@ class TestFileStorage(unittest.TestCase):
         self.storage.new(obj)
         self.storage.save()
         self.storage.reload()
-        self.assertEqual(self.storage.all(), {"BaseModel.{}".format(obj.id): obj})
+        self.assertEqual(self.storage.all(),
+                         {"BaseModel.{}".format(obj.id): obj})
