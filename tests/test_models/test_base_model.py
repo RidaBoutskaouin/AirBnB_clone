@@ -1,100 +1,90 @@
 #!/usr/bin/python3
-"""Unittest for the BaseModel Class """
-import datetime
-from models.base_model import BaseModel
-import os
-import json
+
+"""Unittest for BaseModel class"""
+
 import unittest
+from models.base_model import BaseModel
+from datetime import datetime
+import uuid
+import json
+import os
 
 
 class TestBaseModel(unittest.TestCase):
-    """
-    This class contains unittests for the BaseModel class.
-    """
     def setUp(self):
-        """Method that the setUp the cases to test"""
-        self.my_model = BaseModel()
-        self.my_model.name = "My_First_Model"
-        self.my_model.my_number = 89
-        self.id = self.my_model.id
-        self.type_1 = datetime.datetime
-        self.my_model_json = self.my_model.to_dict()
+        self.base = BaseModel()
 
     def tearDown(self):
-        """Method to clean the tests"""
-        del self.my_model
-
-    def test_init_(self):
-        """Test for The __init__ method in the BaseModel"""
-        self.assertIsInstance(self.my_model, BaseModel)
-
-    def test_new_attribue(self):
-        """Test for the saving attributes"""
-        self.assertEqual(self.my_model.name, "My_First_Model")
-        self.assertEqual(self.my_model.my_number, 89)
+        del self.base
 
     def test_id(self):
-        """Test for the id generating"""
-        self.assertEqual(self.id, self.my_model.id)
+        """Test id is string"""
+        self.assertIsInstance(self.base.id, str)
 
-    def test_id_unique(self):
-        """
-        Test if each instance of BaseModel has a unique id.
-        """
-        base_model1 = BaseModel()
-        base_model2 = BaseModel()
-        self.assertNotEqual(base_model1.id, base_model2.id)
-
-    def test_str_representation(self):
-        """
-        Test the __str__ method of BaseModel.
-        """
-        base_model = BaseModel()
-        str_repr = str(base_model)
-        self.assertIn("[BaseModel]", str_repr)
-        self.assertIn(base_model.id, str_repr)
-        self.assertIn(str(base_model.__dict__), str_repr)
+    def test_unique_id(self):
+        """Test id is unique"""
+        base1 = BaseModel()
+        base2 = BaseModel()
+        self.assertNotEqual(base1.id, base2.id)
 
     def test_created_at(self):
-        """Test for the type of created_at"""
-        self.assertEqual(self.type_1, type(self.my_model.created_at))
+        """Test created_at is datetime"""
+        self.assertIsInstance(self.base.created_at, datetime)
 
-    def test_to_dict_created_at_isoformat(self):
-        self.assertEqual(self.my_model_json['created_at'],
-                         self.my_model.created_at.isoformat())
-
-    def test_to_dict_updated_at_isoformat(self):
-        self.assertEqual(self.my_model_json['updated_at'],
-                         self.my_model.updated_at.isoformat())
+    def test_updated_at(self):
+        """Test updated_at is datetime"""
+        self.assertIsInstance(self.base.updated_at, datetime)
 
     def test_save_updates_updated_at(self):
-        prev_updated_at = self.my_model.updated_at
-        self.my_model.save()
-        self.assertNotEqual(prev_updated_at, self.my_model.updated_at)
+        """Test updated_at changes on save"""
+        old_update = self.base.updated_at
+        self.base.save()
+        self.assertNotEqual(old_update, self.base.updated_at)
 
-    def test_to_dict(self):
-        """Test for to_dic method"""
-        self.assertEqual(self.my_model_json, self.my_model.to_dict())
+    def test_to_dict_type(self):
+        """Test to_dict returns dict"""
+        base_dict = self.base.to_dict()
+        self.assertIsInstance(base_dict, dict)
 
-    def test_to_dict_contains_correct_keys(self):
-        keys = ['id', 'created_at', 'updated_at', '__class__']
-        for key in keys:
-            self.assertIn(key, self.my_model_json)
+    def test_to_dict_keys(self):
+        """Test to_dict has correct keys"""
+        base_dict = self.base.to_dict()
+        self.assertIn("id", base_dict)
+        self.assertIn("created_at", base_dict)
+        self.assertIn("updated_at", base_dict)
+        self.assertIn("__class__", base_dict)
 
-    def test_to_dict_returns(self):
-        """
-        Test if to_dict method returns a
-        dictionary with the correct attributes.
-        """
-        base_model = BaseModel()
-        base_model_dict = base_model.to_dict()
-        self.assertIsInstance(base_model_dict, dict)
-        self.assertIn("__class__", base_model_dict)
-        self.assertEqual(base_model_dict["__class__"], "BaseModel")
-        self.assertIn("id", base_model_dict)
-        self.assertIn("created_at", base_model_dict)
-        self.assertIn("updated_at", base_model_dict)
+    def test_str_format(self):
+        """Test str format"""
+        self.assertEqual(
+            str(self.base),
+            "[BaseModel] ({}) {}".format(self.base.id, self.base.__dict__),
+        )
+
+    def test_kwargs_instantiation(self):
+        """Test instantiation from kwargs"""
+        base_dict = self.base.to_dict()
+        new_base = BaseModel(**base_dict)
+        self.assertEqual(new_base.id, self.base.id)
+        self.assertEqual(new_base.created_at, self.base.created_at)
+        self.assertEqual(new_base.updated_at, self.base.updated_at)
+
+    def test_kwargs_new_instantiation(self):
+        """Test instantiation from kwargs reuses id"""
+        
+        base = BaseModel()
+        base_dict = base.to_dict()
+        
+        # Create new instance from kwargs
+        new_base = BaseModel(**base_dict)
+        
+        # Check if id is reused
+        self.assertEqual(new_base.id, base.id)  
+        
+        # Check for equality of other attributes
+        self.assertEqual(new_base.created_at, base.created_at)
+        self.assertEqual(new_base.updated_at, base.updated_at)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
