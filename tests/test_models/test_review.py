@@ -1,49 +1,97 @@
 #!/usr/bin/python3
-"""Unittest for Review class"""
+
+""" Test Review Unittest module
+
+"""
 
 import unittest
 from models.review import Review
-from datetime import datetime
 from models.base_model import BaseModel
 
+class TestReview_Object_Instance(unittest.TestCase):
 
-class TestReview(unittest.TestCase):
-    """Test cases for Review class"""
+    """ Test review class object instance
+
+    """
 
     def setUp(self):
-        """Set up for all tests"""
-        self.review = Review()
-        self.review.place_id = "San Francisco"
-        self.review.user_id = "CA"
-        self.review.text = "San Francisco"
+        print("Testing Review Object Instance")
 
-    def tearDown(self):
-        """Tear down for all tests"""
-        del self.review
+    def test_review_is_subclass_basemodel(self):
+        r1 = Review()
+        self.assertIsInstance(r1, BaseModel)
 
-    def test_docstring(self):
-        """Test docstring"""
-        self.assertIsNotNone(Review.__doc__)
+    def test_review_unique_ids(self):
+        r1 = Review()
+        r2 = Review()
+        self.assertNotEqual(r1.id, r2.id)
 
-    def test_attributes(self):
-        """Test attributes"""
-        self.assertTrue("id" in self.review.__dict__)
-        self.assertTrue("created_at" in self.review.__dict__)
-        self.assertTrue("updated_at" in self.review.__dict__)
-        self.assertTrue("place_id" in self.review.__dict__)
-        self.assertTrue("user_id" in self.review.__dict__)
-        self.assertTrue("text" in self.review.__dict__)
+    def test_review_placeid_default_value(self):
+        r1 = Review()
+        self.assertEqual(r1.place_id, "")
 
-    def test_subclass(self):
-        """Test if Review is a subclass of BaseModel"""
-        self.assertTrue(issubclass(self.review.__class__, BaseModel), True)
+    def test_review_userid_default_value(self):
+        r1 = Review()
+        self.assertEqual(r1.user_id, "")
 
-    def test_type(self):
-        """Test type of Review"""
-        self.assertEqual(type(self.review.place_id), str)
-        self.assertEqual(type(self.review.user_id), str)
-        self.assertEqual(type(self.review.text), str)
+    def test_review_text_default_value(self):
+        r1 = Review()
+        self.assertEqual(r1.text, "")
 
+    def test_review_id_type(self):
+        r1 = Review()
+        self.assertEqual(type(r1.id), str)
+
+    def test_review_place_id_type(self):
+        r1 = Review()
+        self.assertEqual(type(r1.place_id), str)
+
+    def test_review_user_id_type(self):
+        r1 = Review()
+        self.assertEqual(type(r1.user_id), str)
+
+    def test_review_object_creation_time(self):
+        r1 = Review()
+        r2 = Review()
+        self.assertNotEqual(r1.created_at, r2.created_at)
+
+class TestReview_Has_Attributes_BaseModel(unittest.TestCase):
+
+    """ Test if Review has attributes of BaseModel
+
+    """
+
+    def test_review_has_id_attr(self):
+        r1 = Review()
+        self.assertTrue(r1.id)
+
+    def test_review_has_created_at_attr(self):
+        r1 = Review()
+        self.assertTrue(r1.created_at)
+
+    def test_review_has_updated_at_attr(self):
+        r1 = Review()
+        self.assertTrue(r1.updated_at)
+
+    def test_review_has___str__(self):
+        r1 = Review()
+        self.assertTrue(r1.__str__)
+
+    def test_review_has_save_attr(self):
+        r2 = Review()
+        self.assertTrue(r2.save)
+
+    def test_review_has_to_dict_attr(self):
+        r1 = Review()
+        self.assertTrue(r1.to_dict)
+
+    def test_review_can_take_kwargs(self):
+        r2 = Review(name="Al-Areef")
+        self.assertEqual(r2.name, "Al-Areef")
+
+    def test_review_object_str_representation(self):
+        r1 = Review() 
+        self.assertIn("[Review]", r1.__str__())
 
 if __name__ == "__main__":
     unittest.main()
