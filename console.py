@@ -164,25 +164,22 @@ class HBNBCommand(cmd.Cmd):
                     my_id = command.split("(")[1].strip(")")
                     para = class_name + " " + my_id
                     self.do_destroy(para)
-                elif "update" in command :
+                elif "update" in command:
                     cn = class_name
                     if "{" not in command.split("(")[1]:
-                        my_id_splited = command.split("(")[1].strip(")")
-                        my_id_splited2 = my_id_splited.replace('"', '').replace(',', '')
-                        my_id_splited3 = my_id_splited2.split(" ")[0]
-                        my_id = cn + " " + my_id_splited3
-                        my_att = my_id_splited2.split(" ")[1]
-                        my_val = my_id_splited2.split(" ")[2]
-                        arg = my_id + " " + my_att + " " + my_val
-                        self.do_update(arg)
+                        myd = command.split("(")[1].split(", ")[0].strip(')"')
+                        n_at = command.split("(")[1].split(", ")[1].strip(')"')
+                        v_at = command.split("(")[1].split(", ")[2].strip(')"')
+                        concat = cn + " " + myd + " " + n_at + " " + v_at
+                        self.do_update(concat)
                     elif len(command.split("(")[1].split(", {")) == 2:
-                        my_id = command.split("(")[1].split(", {")[0].strip(')"')
-                        my_dict = command.split("(")[1].split(", {")[1].strip(')')
-                        dic = eval("{" + my_dict)
-                        for att, val in dic.items():
-                            arg = cn + " " + my_id + " " + att + " " + str(val)
-                            self.do_update(arg)
-			    
+                        md = command.split("(")[1].split(", {")[0].strip(')"')
+                        s = command.split("(")[1].split(", {")[1].strip(")")
+                        dic = eval("{" + s)
+                        for atr, val in dic.items():
+                            concat = cn + " " + md + " " + atr + " " + str(val)
+                            self.do_update(concat)
+
     def count(self, class_name):
         """count method"""
         objects = models.storage.all()
