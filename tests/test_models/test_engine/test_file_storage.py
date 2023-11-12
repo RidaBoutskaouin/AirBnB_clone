@@ -38,7 +38,8 @@ class TestFileStorage(unittest.TestCase):
     def test_new(self):
         """Test the new() method"""
         storage.new(self.instance)
-        key = "{}.{}".format(self.instance.__class__.__name__, self.instance.id)
+        key = \
+            "{}.{}".format(self.instance.__class__.__name__, self.instance.id)
         self.assertIn(key, self._objs)
 
     def test_save(self):
