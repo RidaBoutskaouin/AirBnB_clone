@@ -1,54 +1,86 @@
 #!/usr/bin/python3
+
 """Unittest for City class"""
+
 import unittest
 from models.city import City
 from datetime import datetime
 from models.base_model import BaseModel
 
-
-class TestCity(unittest.TestCase):
-    """Test cases for City class"""
-
+class TestCityInstance(unittest.TestCase):
+    
+    """Test City class instance"""
+    
     def setUp(self):
-        """Set up for all tests"""
-        self.city = City()
-        self.city.name = "San Francisco"
-        self.city.state_id = "CA"
+        print("Testing City instance...")
+        
+    def test_city_subclass(self):
+        """Test City is subclass of BaseModel"""
+        city = City()
+        self.assertTrue(isinstance(city, BaseModel))
 
-    def tearDown(self):
-        """Tear down for all tests"""
-        del self.city
+    def test_different_ids(self):
+        """Test City instances have different ids"""
+        city1 = City()
+        city2 = City()
+        self.assertNotEqual(city1.id, city2.id)
+        
+    def test_id_type(self):
+        """Test id is string"""
+        city = City()
+        self.assertEqual(type(city.id), str)
+        
+    def test_created_updated_diff(self):
+        """Test created and updated diff"""
+        city = City()
+        self.assertNotEqual(city.created_at, city.updated_at)
+        
+    def test_attrs_init_empty(self):
+        """Test attrs init as empty"""
+        city = City()
+        self.assertEqual(city.state_id, "")
+        self.assertEqual(city.name, "")
 
-    def test_docstring(self):
-        """Test docstring"""
-        self.assertIsNotNone(City.__doc__)
+class TestCityAttrs(unittest.TestCase):
 
-    def test_attributes(self):
-        """Test attributes"""
-        self.assertTrue("id" in self.city.__dict__)
-        self.assertTrue("created_at" in self.city.__dict__)
-        self.assertTrue("updated_at" in self.city.__dict__)
-        self.assertTrue("name" in self.city.__dict__)
-        self.assertTrue("state_id" in self.city.__dict__)
+    """Test attributes inherited from BaseModel"""
+    
+    def setUp(self):
+        print("Testing City attributes...")
+        
+    def test_has_id(self):
+        """Test City has id attr"""
+        city = City()
+        self.assertTrue(city.id)
+        
+    def test_has_created_at(self):
+        """Test City has created_at attr"""
+        city = City()
+        self.assertTrue(city.created_at)
+        
+    def test_has_updated_at(self):
+        """Test City has updated_at attr"""
+        city = City()
+        self.assertTrue(city.updated_at)
+        
+    def test_has_str(self):
+        """Test City has __str__ attr"""
+        city = City()
+        self.assertTrue(city.__str__)
+        
+    def test_has_dict(self):
+        """Test City has to_dict attr"""
+        city = City()
+        self.assertTrue(city.to_dict)
+        
+class TestCityKVArgs(unittest.TestCase):
 
-    def test_subclass(self):
-        """Test if City is a subclass of BaseModel"""
-        self.assertTrue(issubclass(self.city.__class__, BaseModel), True)
-
-    def test_type(self):
-        """Test type of City"""
-        self.assertEqual(type(self.city.name), str)
-        self.assertEqual(type(self.city.state_id), str)
-
-    def test_save(self):
-        """Test save"""
-        self.city.save()
-        self.assertNotEqual(self.city.created_at, self.city.updated_at)
-
-    def test_to_dict(self):
-        """Test to_dict"""
-        self.assertEqual("to_dict" in dir(self.city), True)
-
-
+    """Test City kwags in init"""
+    
+    def test_kwargs(self):
+        """Test passing kwargs in init"""
+        city = City(name="San Francisco")
+        self.assertEqual(city.name, "San Francisco")
+        
 if __name__ == "__main__":
     unittest.main()
