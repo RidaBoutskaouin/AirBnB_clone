@@ -6,7 +6,7 @@ We will do our best to explain everything that went into this project in great d
 ****
   -  By: GUILLAUME
   -  Weight: 5
-  -  Project to be done in teams of 2 people (your team: OUALID ELHADIM , Asmaa Hadar)
+  -  Project to be done in teams of 2 people (your team: Mohamed Lkoustim , Rida Boutskaouin)
 ****
 ## General
 - How to create a Python package
@@ -87,4 +87,16 @@ Add to that the **quick** retrieval of data when needed.<br>
 - **Game state saving_** : Our game has to have the option of saving the current state, where we save the level that the player reached and the positioning of the characters.<br>
 - **Data exchange between languages_** :  Given a case of two incompatible languages but we want to use the objects we created in the first language with in a program created with another language.<br>
 - **Configuration files_** : These types of files require a state saving, where we save the last modification done, and it makes perfect sense to use serialization and deserialization to do this.
-
+### HANDLING ARGUMENTS
+When we talk about names arguments we simply mean **kwargs, while when we talk about positional arguments we are describing *args.
+- **Named arguments * kwargs /**
+	They are arguments given in the function call with the names of the attributes.<br>
+	`func(name: "Person", age: 11)`<br>
+	The * kwargs are given as a dictionary.
+	They can have a default value if none was given.<br>
+	`def fun(kwarg1=None, kwarg2=60)`<br>
+- **Positional arguments * args /**
+	They are arguments given without specifying the names of the attributes.
+	`func("Person", 11)`
+	They must be provided before the named arguments if they were both mixed in a function call or in a function declaration.
+	And different to named arguments they can not have a default value.
