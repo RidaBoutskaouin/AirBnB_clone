@@ -82,4 +82,9 @@ Another case is when we want to **send data across a network**, serialization tr
 **Portability** meaning that serialized data in a programming language x, can be deserialized using another y.<br>
 Add to that the **quick** retrieval of data when needed.<br>
 
+**EXAMPLES** :
+- **Databases_** : We can use this process of serialization and deserialization as a way to manipulate databases (files).<br>
+- **Game state saving_** : Our game has to have the option of saving the current state, where we save the level that the player reached and the positioning of the characters.<br>
+- **Data exchange between languages_** :  Given a case of two incompatible languages but we want to use the objects we created in the first language with in a program created with another language.<br>
+- **Configuration files_** : These types of files require a state saving, where we save the last modification done, and it makes perfect sense to use serialization and deserialization to do this.
 
