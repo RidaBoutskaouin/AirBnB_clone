@@ -75,3 +75,11 @@ We do that by following several methods.
 	But a better approach would be to define a method within the class that returns a dictionary.
 	In serialization the object will be transformed to a dictionary and it'll look like this :
 	`{"data": "Hello"}`.
+The importancy of this process shows in cases where we want to **exchange data** and communicate between different systems.<br>
+It is efficient for **data storage**, take for example the case where we want to **keep our objects** saved in a file, that way it will be important to serialize them and save them.<br>
+Another case is when we want to **send data across a network**, serialization transforms the data into a format that can be transmitted efficiently.<br>
+**Data persistence** is also one of the reason, it is basically keeping a state of data stored so that it can be restored later when the program reopens. And an example of that would be game.<br>
+**Portability** meaning that serialized data in a programming language x, can be deserialized using another y.<br>
+Add to that the **quick** retrieval of data when needed.<br>
+
+
