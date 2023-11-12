@@ -45,3 +45,8 @@ class TestAmenity(unittest.TestCase):
     def test_to_dict(self):
         """Test for correct dictionary output"""
         self.assertEqual("to_dict" in dir(self.amenity), True)
+    
+
+if __name__ == "__main__":
+    unittest.main()
+

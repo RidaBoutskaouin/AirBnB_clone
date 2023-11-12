@@ -46,3 +46,7 @@ class TestState(unittest.TestCase):
     def test_to_dict(self):
         """Test to_dict"""
         self.assertEqual("to_dict" in dir(self.state), True)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -63,3 +63,7 @@ class TestPlace(unittest.TestCase):
         self.assertEqual(type(self.place.number_rooms), int)
         self.assertEqual(type(self.place.number_bathrooms), int)
         self.assertEqual(type(self.place.max_guest), int)
+
+
+if __name__ == "__main__":
+    unittest.main()
